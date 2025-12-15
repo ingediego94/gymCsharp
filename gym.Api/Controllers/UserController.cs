@@ -53,12 +53,6 @@ public class UserController : ControllerBase
 
         var userCreated = await _userService.CreateAsync(dto);
         
-        // return CreatedAtAction(
-        //     nameof(GetById),
-        //     new { id = userCreated.Id },
-        //     userCreated
-        // );
-
         return Ok(new { message = $"Registro creado exitosamente.", userCreated });
     }
     

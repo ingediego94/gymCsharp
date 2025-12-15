@@ -40,18 +40,49 @@ public class BranchService : IBranchService
         return _mapper.Map<ResponseBranchDto>(branch);
     }
 
-    // public async Task<ResponseBranchDto> CreateAsync(BranchCreateDto dto)
-    // {
-    //     
-    // }
-    //
-    // public async Task<ResponseBranchDto?> UpdateAsync(int id, BranchUpdateDto dto)
-    // {
-    //     
-    // }
-    //
-    // public async Task<bool> DeleteAsync(int id)
-    // {
-    //     
-    // }
+    
+    // CREATE:
+    public async Task<ResponseBranchDto> CreateAsync(BranchCreateDto dto)
+    {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(BranchCreateDto),
+                "El cuerpo de la petición no puede estar vacio.");
+
+        var branch = _mapper.Map<Branch>(dto);
+
+        var response = await _branchRepository.CreateAsync(branch);
+
+        return _mapper.Map<ResponseBranchDto>(response);
+    }
+    
+    
+    // UPDATE:
+    public async Task<ResponseBranchDto?> UpdateAsync(int id, BranchUpdateDto dto)
+    {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto));
+
+        var branch = await _branchRepository.GetByIdAsync(id);
+
+        if (branch == null)
+            return null;
+
+        _mapper.Map(dto, branch);
+
+        var updatedBranch = await _branchRepository.UpdateAsync(branch);
+
+        return _mapper.Map<ResponseBranchDto>(updatedBranch);
+    }
+    
+    
+    // DELETE:
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var toDelete = await _branchRepository.GetByIdAsync(id);
+
+        if (toDelete == null)
+            return false;
+
+        return await _branchRepository.DeleteAsync(toDelete);
+    }
 }
