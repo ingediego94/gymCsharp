@@ -9,12 +9,17 @@ public class MapProfile : Profile
     {
         // User:
         CreateMap<UserCreateUpdateDto, User>();
-        CreateMap<User, ResponseUserDto>();
         CreateMap<UserUpdateDto, User>();
+        CreateMap<User, ResponseUserDto>();
         
         // Branch:
         CreateMap<BranchCreateDto, Branch>();
-        CreateMap<Branch, ResponseBranchDto>();
         CreateMap<BranchUpdateDto, Branch>();
+        CreateMap<Branch, ResponseBranchDto>();
+        
+        // Payment:
+        CreateMap<PaymentCreateDto, Payment>();
+        CreateMap<PaymentUpdateDto, Payment>();
+        CreateMap<Payment, ResponsePaymentDto>();
     }
 }

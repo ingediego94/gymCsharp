@@ -15,6 +15,7 @@ public class BranchController : ControllerBase
 {
     private readonly IBranchService _branchService;
     private readonly IMapper _mapper;
+    
 
     public BranchController(IBranchService branchService,
         IMapper mapper)
@@ -29,8 +30,9 @@ public class BranchController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var branches = await _branchService.GetAllAsync();
-
+        
         return Ok(branches);
+
     }
 
 
@@ -43,7 +45,7 @@ public class BranchController : ControllerBase
         return Ok(branch);
     }
 
-    
+
     // CREATE:
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] BranchCreateDto dto)
@@ -53,10 +55,10 @@ public class BranchController : ControllerBase
 
         var branchCreated = await _branchService.CreateAsync(dto);
 
-        return Ok(new { message = $"Registro creado exitosamente.", branchCreated});
+        return Ok(new { message = $"Registro creado exitosamente.", branchCreated });
     }
-    
-    
+
+
     // UPDATE:
     [HttpPut("update/{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] BranchUpdateDto dto)
@@ -68,10 +70,23 @@ public class BranchController : ControllerBase
 
         if (updatedBranch == null)
             return NotFound(new { message = $"Branch con ID {id} no encontrado.," });
-        
-        return Ok(new {message="Registro actualizado con éxito.", updatedBranch});
 
-
+        return Ok(new { message = "Registro actualizado con éxito.", updatedBranch });
 
     }
+
+    
+    // DELETE:
+    [HttpDelete("delete/{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var toDelete = await _branchService.DeleteAsync(id);
+        
+        if(!toDelete)
+            return NotFound(
+                new {message=$"Registro con ID {id} no encontrado."}
+                );
+        return Ok(new { message = $"Registro con ID {id} eliminado exitosamente." });
+    }
+
 }

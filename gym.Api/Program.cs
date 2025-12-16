@@ -25,6 +25,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<Branch>, BranchRepository>();
 builder.Services.AddScoped<IBranchService, BranchService>();
 
+// Payment:
+builder.Services.AddScoped<IRepository<Payment>, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
