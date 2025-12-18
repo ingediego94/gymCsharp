@@ -5,6 +5,7 @@ public class Payment
     public int Id { get; set; }
     public int BranchId { get; set; }
     public int UserId { get; set; }
+    public double Price { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     

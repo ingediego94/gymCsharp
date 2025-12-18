@@ -37,18 +37,52 @@ public class PaymentService : IPaymentService
         return _mapper.Map<ResponsePaymentDto>(payment);
     }
 
-    // public async Task<ResponsePaymentDto> CreateAsync(PaymentCreateDto dto)
-    // {
-    //
-    // }
-    //
-    // public async Task<ResponsePaymentDto?> UpdateAsync(PaymentUpdateDto dto)
-    // {
-    //
-    // }
-    //
-    // public async Task<bool> DeleteAsync(int id)
-    // {
-    //
-    // }
+    
+    // CREATE:
+    public async Task<ResponsePaymentDto> CreateAsync(PaymentCreateDto dto)
+    {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(PaymentCreateDto),
+                "El cuerpo de la petición no puede estar vacío.");
+
+        var payment = _mapper.Map<Payment>(dto);
+
+        var response = await _paymentRepository.CreateAsync(payment);
+
+        return _mapper.Map<ResponsePaymentDto>(response);
+    }
+
+    
+    // UPDATE:
+    public async Task<ResponsePaymentDto?> UpdateAsync(int id, PaymentUpdateDto dto)
+    {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(PaymentUpdateDto),
+                $"El cuerpo de la petición no puede estar vacío.");
+
+        var payment = await _paymentRepository.GetByIdAsync(id);
+
+        if (payment == null)
+            return null;
+        
+        _mapper.Map(dto, payment);
+
+        var paymentUploated = await _paymentRepository.UpdateAsync(payment);
+
+        return _mapper.Map<ResponsePaymentDto>(paymentUploated);
+
+    }
+    
+    
+    // DELETE:
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var toDelete = await _paymentRepository.GetByIdAsync(id);
+
+        if (toDelete == null)
+            return false;
+
+        await _paymentRepository.DeleteAsync(toDelete);
+        return true;
+    }
 }
